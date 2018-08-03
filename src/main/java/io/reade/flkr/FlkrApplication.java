@@ -1,21 +1,19 @@
 package io.reade.flkr;
 
-import io.reade.flkr.storage.StorageService;
+import io.reade.flkr.service.StorageService;
+import io.reade.flkr.entity.User;
+import io.reade.flkr.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import io.reade.flkr.storage.StorageProperties;
-import io.reade.flkr.storage.StorageService;
-import org.springframework.context.annotation.ComponentScan;
+import io.reade.flkr.config.StorageProperties;
 
-@EnableAutoConfiguration
 @SpringBootApplication
 @EnableConfigurationProperties(StorageProperties.class)
 public class FlkrApplication {
@@ -29,11 +27,11 @@ public class FlkrApplication {
 	@Bean
 	public CommandLineRunner demo(UserRepository repository) {
 		return args -> {
-			repository.save(new User("Keturah", "Bauer"));
-			repository.save(new User("Bob", "Bauer"));
-			repository.save(new User("April", "O'Brian"));
-			repository.save(new User("Rachel", "Palmer"));
-			repository.save(new User("Shiloh", "Dessler"));
+			repository.save(new User("Keturah", "Bauer", "kbauer"));
+			repository.save(new User("Bob", "Bauer", "bbauer"));
+			repository.save(new User("April", "O'Brian", "abrian"));
+			repository.save(new User("Rachel", "Palmer", "rpalmer"));
+			repository.save(new User("Shiloh", "Dessler", "sdessler"));
 
 			log.info("Customers found with findAll():");
 			log.info("-------------------------------");
@@ -56,6 +54,12 @@ public class FlkrApplication {
                 log.info(bauer.toString());
             });
 			log.info("");
+            log.info("Users found with findByFirstName('Shiloh'):");
+            log.info("-----------------------------------------");
+            repository.findByFirstName("Shiloh").forEach(shiloh -> {
+                log.info(shiloh.toString());
+            });
+            log.info("");
 		};
 	}
 
